@@ -1,10 +1,9 @@
 import React from 'react'
 import Register from '../../components/Register/Register'
-
-function page() {
+const page = () => {
   return (
     <div>
-        <Register/>
+      <Register/>
     </div>
   )
 }
