@@ -1,6 +1,6 @@
 import React from "react";
 
-function LoginAndRegiester() {
+const Login=()=> {
   return (
     <div>
       <link
@@ -155,4 +155,4 @@ function LoginAndRegiester() {
   );
 }
 
-export default LoginAndRegiester;
+export default Login;
