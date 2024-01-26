@@ -1,43 +1,62 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 
-const Register = ()=> {
-    const [info,setInfo]=useState({username:"",email:"",password:''});
-    const [error,setError] = useState('');
-    const [pending,setPending]=useState(false);
+const Register = () => {
+  const [info, setInfo] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confpassword: "",
+    terms:"",
+  });
+  const [error, setError] = useState("");
+  const [pending, setPending] = useState(false);
+
+  function handleInput(e) {
+    setInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    //console.log(info);
+    //console.log(e.target.name);
+    //console.log(e.target.value);
+  }
+
+  async function handleSubmit(e) {
+    //console.log(info);
+    e.preventDefault();
     
-    function handleInput(e){
-        setInfo((prev)=>({ ...prev,[e.target.name]: e.target.value}));
+    if (!info.username || !info.email || !info.password || !info.confpassword) {
+      setError("Must Provide all the Credential.");
     }
-    async function handleSubmit(){
-        e.preventDefault();
-        if (!info.username || !info.email || !info.password){
-            setError("Must Provide all the Credential.")
-        }
-        try{
-            setPending(true);
-            const res = await fetch("api/regiester",{
-                method:"POST",
-                headers:{
-                    "Content-Type":"application/json",
-                },
-                body: JSON.stringify(info),
-            });
-            if(res.ok){
-                setPending(false);
-                const htmlForm = e.target;
-                htmlForm.reset();
-            }else{
-                const errorData =await res.json();
-                setError(errorData.message);
-                
-                setPending(false);
-            }
-        }catch(error){
-            console.log("somting went Wrong");
-            setPending(false);
-        }
+    if (info.confpassword != info.password) {
+      setError("Password is not Match.");
     }
+    if (info.terms == "False"){
+      setError("Please Checked Terms And Conditions")
+    }
+    try {
+      setPending(true);
+      const res = await fetch("api/regiester", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(info),
+      });
+      if (res.ok) {
+        setPending(false);
+        const htmlForm = e.target;
+        htmlForm.reset();
+      } else {
+        const errorData = await res.json();
+        setError(errorData.message);
+
+        setPending(false);
+      }
+    } catch (error) {
+      
+      console.log("somting went Wrong");
+      setPending(false);
+    }
+  }
   return (
     <div>
       <section className="bg-gray-50 dark:bg-gray-900">
@@ -58,7 +77,27 @@ const Register = ()=> {
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Create and account
               </h1>
-              <form className="space-y-4 md:space-y-6" action="#" onSubmit={handleSubmit}>
+              <form
+                className="space-y-4 md:space-y-6"
+                action="#"
+                onSubmit={handleSubmit}
+              >
+                <div>
+                  <label
+                    htmlFor="username"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    UserName
+                  </label>
+                  <input
+                    type="text"
+                    name="username"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="username"
+                    required
+                    onChange={(e) => handleInput(e)}
+                  />
+                </div>
                 <div>
                   <label
                     htmlFor="email"
@@ -72,8 +111,8 @@ const Register = ()=> {
                     id="email"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="name@company.com"
-                    required=""
-                    onChange={(e)=>handleInput(e)}
+                    required
+                    onChange={(e) => handleInput(e)}
                   />
                 </div>
                 <div>
@@ -89,36 +128,39 @@ const Register = ()=> {
                     id="password"
                     placeholder="••••••••"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required=""
-                    onChange={(e)=>handleInput(e)}
+                    required
+                    onChange={(e) => handleInput(e)}
                   />
                 </div>
                 <div>
                   <label
-                    htmlFor="confirm-password"
+                    htmlFor="confpassword"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Confirm password
                   </label>
                   <input
-                    type="confirm-password"
-                    name="confirm-password"
+                    type="password"
+                    name="confpassword"
                     id="confirm-password"
                     placeholder="••••••••"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required=""
-                    onChange={(e)=>handleInput(e)}
+                    required
+                    onChange={(e) => handleInput(e)}
                   />
                 </div>
                 <div className="flex items-start">
                   <div className="flex items-center h-5">
                     <input
-                      id="terms"
+                      name="terms"
                       aria-describedby="terms"
                       type="checkbox"
                       className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                      required=""
-                      onChange={(e)=>handleInput(e)}
+                      required
+                      onChange={(e) => {
+                        e.target.value = e.target.checked ? "True" : "False";
+                        handleInput(e);
+                      }}
                     />
                   </div>
                   <div className="ml-3 text-sm">
@@ -136,9 +178,10 @@ const Register = ()=> {
                     </label>
                   </div>
                 </div>
+                {error && <span>{error}</span>}
                 <button
                   type="submit"
-                  className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                  className="w-full text-white bg-slate-700 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                 >
                   Create an account
                 </button>
@@ -158,6 +201,6 @@ const Register = ()=> {
       </section>
     </div>
   );
-}
+};
 
 export default Register;
