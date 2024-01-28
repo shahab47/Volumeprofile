@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import { FaEye } from "react-icons/fa6";
-//<FaEye />
+
 import { FaEyeSlash } from "react-icons/fa6";
-//<FaEyeSlash />
+
 
 const Register = () => {
   const [info, setInfo] = useState({
@@ -52,7 +52,7 @@ const Register = () => {
     }
     try {
       setPending(true);
-      const res = await fetch("api/regiester", {
+      const res = await fetch("api/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -61,8 +61,9 @@ const Register = () => {
       });
       if (res.ok) {
         setPending(false);
-        const htmlForm = e.target;
-        htmlForm.reset();
+        const form = e.target;
+        form.reset();
+        console.log("User Regiesterd")
       } else {
         const errorData = await res.json();
         setError(errorData.message);
@@ -199,7 +200,7 @@ const Register = () => {
                     </label>
                   </div>
                 </div>
-                {error && <span>{error}</span>}
+                <span>{error}</span>
                 <button
                   type="submit"
                   className="w-full text-white bg-slate-700 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
