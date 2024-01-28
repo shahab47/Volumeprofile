@@ -9,14 +9,14 @@ export async function POST(req) {
     const { username, email, password } = await req.json();
     console.log({ username, email, password });
     const exists = await User.findOne({
-      $or: [{ email }, { username }]
+      $or: [{ email }, { username }],
     });
-    
+
     if (exists) {
-      return NextResponse.json({ message: "Username or email alredy exists." });
-      {
-        status: 500;
-      }
+      return NextResponse.json({
+        message: "Username or email alredy exists.",
+        status: 409,
+      });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     await User.create({ username, email, password: hashedPassword });
@@ -25,7 +25,7 @@ export async function POST(req) {
   } catch (error) {
     console.log("Error While Registering User.", error);
     return NextResponse.json(
-      { message: "Erro Occured While Registering the User." },
+      { message: "Error Occured While Registering the User." },
       { status: 500 }
     );
   }

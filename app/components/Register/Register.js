@@ -13,6 +13,7 @@ const Register = () => {
     confpassword: "",
     terms:"",
   });
+
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
 
@@ -20,18 +21,18 @@ const Register = () => {
 
   const handlePasswordVisibilityToggle = () => {
     setPasswordVisible(!passwordVisible);
-    console.log(passwordVisible);
+    //console.log(passwordVisible);
   };
 
   function handleInput(e) {
     setInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
     if(e.target.name == "confpassword" && e.target.value != info.password){
-      console.log("Passwords do not match.")
+      //console.log("Passwords do not match.")
     }
     //console.log(info);
-    console.log(e.target.name);
-    console.log(e.target.value);
+    //console.log(e.target.name);
+    //console.log(e.target.value);
   }
 
   async function handleSubmit(e) {
@@ -50,6 +51,7 @@ const Register = () => {
       setError("Please Checked Terms And Conditions")
       return;
     }
+    console.log(info)
     try {
       setPending(true);
       const res = await fetch("api/register", {
@@ -58,8 +60,12 @@ const Register = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(info),
+        
       });
+      
+      
       if (res.ok) {
+        console.log(res);
         setPending(false);
         const form = e.target;
         form.reset();
