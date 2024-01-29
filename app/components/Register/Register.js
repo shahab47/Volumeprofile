@@ -1,9 +1,9 @@
 "use client";
+import Link from "next/link";
 import React, { useState } from "react";
 import { FaEye } from "react-icons/fa6";
 
 import { FaEyeSlash } from "react-icons/fa6";
-
 
 const Register = () => {
   const [info, setInfo] = useState({
@@ -11,7 +11,7 @@ const Register = () => {
     email: "",
     password: "",
     confpassword: "",
-    terms:"",
+    terms: "",
   });
 
   const [error, setError] = useState("");
@@ -27,7 +27,7 @@ const Register = () => {
   function handleInput(e) {
     setInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-    if(e.target.name == "confpassword" && e.target.value != info.password){
+    if (e.target.name == "confpassword" && e.target.value != info.password) {
       //console.log("Passwords do not match.")
     }
     //console.log(info);
@@ -38,7 +38,7 @@ const Register = () => {
   async function handleSubmit(e) {
     //console.log(info);
     e.preventDefault();
-    
+
     if (!info.username || !info.email || !info.password || !info.confpassword) {
       setError("Must Provide all the Credential.");
       return;
@@ -47,11 +47,11 @@ const Register = () => {
       setError("Password is not Match.");
       return;
     }
-    if (info.terms == "False"){
-      setError("Please Checked Terms And Conditions")
+    if (info.terms == "False") {
+      setError("Please Checked Terms And Conditions");
       return;
     }
-    console.log(info)
+    console.log(info);
     try {
       setPending(true);
       const res = await fetch("api/register", {
@@ -60,16 +60,14 @@ const Register = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(info),
-        
       });
-      
-      
+
       if (res.ok) {
         console.log(res);
         setPending(false);
         const form = e.target;
         form.reset();
-        console.log("User Regiesterd")
+        console.log("User Regiesterd");
       } else {
         const errorData = await res.json();
         setError(errorData.message);
@@ -77,7 +75,6 @@ const Register = () => {
         setPending(false);
       }
     } catch (error) {
-      
       console.log("somting went Wrong");
       setPending(false);
     }
@@ -120,7 +117,6 @@ const Register = () => {
                     name="username"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="username"
-                    required
                     onChange={(e) => handleInput(e)}
                   />
                 </div>
@@ -137,7 +133,6 @@ const Register = () => {
                     id="email"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="name@company.com"
-                    required
                     onChange={(e) => handleInput(e)}
                   />
                 </div>
@@ -154,10 +149,11 @@ const Register = () => {
                     id="password"
                     placeholder="••••••••"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required
                     onChange={(e) => handleInput(e)}
-                    
-                  /><div onClick={handlePasswordVisibilityToggle}>{passwordVisible ? <FaEye /> : <FaEyeSlash />}</div>
+                  />
+                  <div onClick={handlePasswordVisibilityToggle}>
+                    {passwordVisible ? <FaEye /> : <FaEyeSlash />}
+                  </div>
                 </div>
                 <div>
                   <label
@@ -172,7 +168,6 @@ const Register = () => {
                     id="confirm-password"
                     placeholder="••••••••"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required
                     onChange={(e) => handleInput(e)}
                   />
                 </div>
@@ -184,7 +179,6 @@ const Register = () => {
                       aria-describedby="terms"
                       type="checkbox"
                       className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                      required
                       onChange={(e) => {
                         e.target.value = e.target.checked ? "True" : "False";
                         handleInput(e);
@@ -206,22 +200,24 @@ const Register = () => {
                     </label>
                   </div>
                 </div>
-                <span>{error}</span>
+                <span>{}</span>
                 <button
                   type="submit"
                   className="w-full text-white bg-slate-700 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                 >
                   Create an account
                 </button>
-                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                  Already have an account?{" "}
-                  <a
-                    href="#"
-                    className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                  >
-                    Login here
-                  </a>
-                </p>
+                <Link href="/login">
+                  <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                    Already have an account?{" "}
+                    <a
+                      href="#"
+                      className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                    >
+                      Login here
+                    </a>
+                  </p>
+                </Link>
               </form>
             </div>
           </div>

@@ -1,4 +1,4 @@
-/*
+
 import NextAuth from "next-auth/next";
 import CredentialsProvidedr from "next-auth/providers/credentials"
 
@@ -25,7 +25,4 @@ export const authOptions ={
 }
 const handler = NextAuth(authOptions);
 
-export {handler as GET,handler as POST};*/
-export async function GET(req, res) {
-    // ...
-  }
+export {handler as GET,handler as POST};
